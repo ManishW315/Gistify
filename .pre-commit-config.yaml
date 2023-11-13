@@ -5,7 +5,6 @@ repos:
     rev: v4.5.0
     hooks:
     -   id: trailing-whitespace
-        exclude: venv/
     -   id: check-yaml
 -   repo: local
     hooks:
@@ -15,4 +14,3 @@ repos:
         args: ["style"]
         language: system
         pass_filenames: false
-        exclude: venv/
