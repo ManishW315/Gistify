@@ -43,13 +43,9 @@ if __name__ == "__main__":
 
     print("=" * 100)
     print("Input Sentence")
-    input = """In astronomy, dark matter is a hypothetical form of matter that appears to not interact with light or the electromagnetic field. Dark matter is implied by gravitational effects which cannot be explained by general relativity unless more matter is present than can be seen, which include: formation and evolution of galaxies, gravitational lensing, observable universe's current structure, mass position in galactic collisions, motion of galaxies within galaxy clusters, and cosmic microwave background anisotropies.
-In the standard Lambda-CDM model of cosmology, the mass–energy content of the universe is 5% ordinary matter, 26.8% dark matter, and 68.2% a form of energy known as dark energy. Thus, dark matter constitutes 85% of the total mass, while dark energy and dark matter constitute 95% of the total mass–energy content.
-Dark matter is not known to interact with ordinary baryonic matter and radiation except through gravity, making it difficult to detect in the laboratory. The leading explanation is that dark matter is some as-yet-undiscovered subatomic particle, such as weakly interacting massive particles (WIMPs) or axions. The other main possibility is that dark matter is composed of primordial black holes.
-Dark matter is classified as "cold", "warm", or "hot" according to its velocity (more precisely, its free streaming length). Recent models have favored a cold dark matter scenario, in which structures emerge by the gradual accumulation of particles, but after a half century of fruitless dark matter particle searches, more recent gravitational wave and James Webb Space Telescope observations have considerably strengthened the case for primordial and direct collapse black holes.
-Although the astrophysics community generally accepts dark matter's existence, a minority of astrophysicists, intrigued by specific observations that are not well-explained by ordinary dark matter, argue for various modifications of the standard laws of general relativity. These include modified Newtonian dynamics, tensor–vector–scalar gravity, or entropic gravity. So far none of the proposed modified gravity theories can successfully describe every piece of observational evidence at the same time, suggesting that even if gravity has to be modified, some form of dark matter will still be required."""
-    input_list = input.split(". ")
-    pp.pprint(input)
+    input_text = """JavaScript doesn't allow you to specify what type something is. I'm guessing that wasn't deemed very useful for simply animating some HTML buttons. It also makes sense because it's quite common in web development that variables hold different types of data depending on what the user does or what kind of data the server returns. However, if you want to develop a full-fledged web application, not having these types is a recipe for disaster. And this is also why TypeScript has become so popular. TypeScript is a superset of JavaScript that adds static types to the language. With TypeScript, you can write type annotations and the TypeScript compiler will check the types at compile time when you compile the code to JavaScript, helping you catch common errors before they run."""
+    input_list = input_text.split(". ")
+    pp.pprint(input_text)
     print("=" * 100)
     print("Generating output for each sentence")
     output_list = [summarize(sentence, max_length=64) for sentence in input_list]
@@ -58,5 +54,5 @@ Although the astrophysics community generally accepts dark matter's existence, a
 
     print("=" * 100)
     print("Generating Final output")
-    pp.pprint(summarize(input, num_beams=5))
+    pp.pprint(summarize(input_text, num_beams=5))
     print("=" * 100)
