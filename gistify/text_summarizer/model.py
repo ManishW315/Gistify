@@ -6,11 +6,10 @@ from transformers import AdamW, BartForConditionalGeneration
 class SummaryModel(pl.LightningModule):
     """Lightning model to finetune LLM."""
 
-    def __init__(self, learning_rate):
+    def __init__(self):
         super().__init__()
 
         self.model = BartForConditionalGeneration.from_pretrained(SummarizationConfig.MODEL_NAME, return_dict=True)
-        self.lr = learning_rate
 
     def forward(self, input_ids, attention_mask, decoder_attention_mask, labels=None):
         output = self.model(
@@ -55,5 +54,5 @@ class SummaryModel(pl.LightningModule):
         return loss
 
     def configure_optimizers(self):
-        optimizer = AdamW(self.parameters(), lr=self.lr)
+        optimizer = AdamW(self.parameters(), lr=SummarizationConfig.learning_rate)
         return optimizer

@@ -9,7 +9,6 @@ from transformers import BartTokenizer
 
 def train_llm(
     batch_size: int = SummarizationConfig.batch_size,
-    learning_rate: float = SummarizationConfig.lr,
     max_epochs: int = SummarizationConfig.max_epochs,
     max_len_in: int = SummarizationConfig.max_len_input,
     max_len_out: int = SummarizationConfig.max_len_output,
@@ -22,7 +21,6 @@ def train_llm(
 
     Args:
         batch_size (int, optional): Number of samples per batch. Defaults to SummarizationConfig.batch_size.
-        learning_rate (float, optional): Learning rate of model. Defaults to SummarizationConfig.lr.
         max_epochs (int, optional): Maximum number of epochs. Defaults to SummarizationConfig.max_epochs.
         max_len_in (int, optional): Maximum input sequence length. Defaults to SummarizationConfig.max_len_input.
         max_len_out (int, optional): Maximum output sequence length. Defaults to SummarizationConfig.max_len_output.
@@ -37,7 +35,7 @@ def train_llm(
     data = SummaryDataModule(cnn_dataset, tokenizer, batch_size, max_len_in, max_len_out, padding, truncation, add_special_tokens, num_workers)
 
     # ===== Model =====
-    model = SummaryModel(learning_rate)
+    model = SummaryModel()
 
     # ===== Callback =====
     checkpoint_callback = ModelCheckpoint(

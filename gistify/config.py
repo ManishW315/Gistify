@@ -1,4 +1,6 @@
+import os
 from dataclasses import dataclass
+from pathlib import Path
 
 
 @dataclass
@@ -16,6 +18,7 @@ class SummarizationConfig:
     """Configurations for text summarization."""
 
     DATASET_LOC = "cnn_dailymail"
+    artifacts_checkpoint_path = os.path.join((Path(__file__).parent.parent), "artifacts", "best-checkpoint.ckpt")
     SAMPLES = 15000
     test_size = 0.2
     CONFIG = "3.0.0"
