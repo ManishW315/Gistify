@@ -39,9 +39,9 @@ if __name__ == "__main__":
     trained_model = SummaryModel.load_from_checkpoint(SummarizationConfig.artifacts_checkpoint_path)
     trained_model.freeze()
 
-    text, generated_text, output_list = integrate_s2t_sum("https://www.youtube.com/shorts/BBCbIxuBJws")
+    text, generated_text, output_list = integrate_s2t_sum("<yt_url>")
     pp.pprint(text)
     pp.pprint(generated_text)
     print(output_list)
 
-    response = integrate_s2t_qa("https://www.youtube.com/shorts/BBCbIxuBJws", "What are some limitations of JavaScript?")
+    response = integrate_s2t_qa("<yt_url>", "<question>")

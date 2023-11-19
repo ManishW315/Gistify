@@ -3,6 +3,8 @@ import time
 import yt_dlp as youtube_dl
 from gistify.config import Speech2TextConfig, logger
 
+# Reference (HuggingFace Spaces): https://huggingface.co/spaces/sanchit-gandhi/whisper-large-v2
+
 
 def _return_yt_html_embed(yt_url):
     video_id = yt_url.split("?v=")[-1]

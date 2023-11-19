@@ -1,3 +1,4 @@
+import argparse
 import os
 import tempfile
 
@@ -33,6 +34,22 @@ def yt_transcribe(yt_url, task, pipe):
 
 
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="Input url and task.")
+
+    parser.add_argument("--url", metavar="", type=str, help="url of the YouTube video.")
+    parser.add_argument(
+        "--task",
+        metavar="",
+        type=str,
+        default="transcribe",
+        help="Task that needs to be performed. Parse 'transcribe' if the audio of video is in english otherwise parse 'translate' to first transcribe and then translate.",
+    )
+
+    args = parser.parse_args()
+
+    yt_url = args.url
+    task = args.task
+
     device = 0 if torch.cuda.is_available() else "cpu"
 
     pipe = pipeline(
@@ -42,5 +59,5 @@ if __name__ == "__main__":
         device=device,
     )
 
-    html_embed_str, text = yt_transcribe("https://www.youtube.com/shorts/BBCbIxuBJws", "transcribe", pipe)
+    html_embed_str, text = yt_transcribe(yt_url=yt_url, task=task, pipe=pipe)
     print(text)

@@ -37,6 +37,11 @@ class SummarizationConfig:
     learning_rate = 0.0001
     max_epochs = 1
 
+    max_length = 128
+    num_beams = 3
+    repetition_penalty = 2.5
+    length_penalty = 2.0
+
 
 logs_path = os.path.join(Path(__file__).parent.parent, "logs")
 # Create logs folder

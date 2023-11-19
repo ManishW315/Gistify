@@ -1,3 +1,4 @@
+import argparse
 import pprint
 
 import torch
@@ -7,7 +8,7 @@ from gistify.text_summarizer.model import SummaryModel
 from transformers import BartTokenizer
 
 
-def summarize(text: str, max_length: int = 128, num_beams: int = 3, repetition_penalty: float = 2.5, length_penalty: float = 1.75):
+def summarize(text: str, max_length: int, num_beams: int, repetition_penalty: float, length_penalty: float):
     device = "cuda:0" if torch.cuda.is_available() else "cpu"
     logger.info(f"Device set to {device}.")
     text_encoding = prepare_input(
@@ -36,25 +37,69 @@ def summarize(text: str, max_length: int = 128, num_beams: int = 3, repetition_p
 
 
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="Input text and set prediction parameter values.")
+
+    parser.add_argument("--text", metavar="", type=str, help="Text that needs to be summarized")
+    parser.add_argument(
+        "--max_length", metavar="", type=int, default=SummarizationConfig.max_length, help="The maximum acceptable length of input sequence."
+    )
+    parser.add_argument(
+        "--num_beams",
+        metavar="",
+        type=int,
+        default=SummarizationConfig.num_beams,
+        help="The parameter for number of beams. If higher than 1 then effectively switches from greedy search to beam search.",
+    )
+    parser.add_argument(
+        "--repetition_penalty",
+        metavar="",
+        type=float,
+        default=SummarizationConfig.repetition_penalty,
+        help=" The parameter for repetition penalty. A value of 1.0 means no penalty.",
+    )
+    parser.add_argument(
+        "--length_penalty",
+        metavar="",
+        type=float,
+        default=SummarizationConfig.length_penalty,
+        help="The parameter for length penalty. length_penalty > 0.0 promotes longer sequences, while length_penalty < 0.0 encourages shorter sequences.",
+    )
+
+    args = parser.parse_args()
+
+    text = args.text
+    max_length = args.max_length
+    num_beams = args.num_beams
+    repetition_penalty = args.repetition_penalty
+    length_penalty = args.length_penalty
+
     pp = pprint.PrettyPrinter(width=100, indent=4)
-    print("Loading Tokenizer")
+    logger.info("Loading Summarization Tokenizer")
     tokenizer = BartTokenizer.from_pretrained(SummarizationConfig.MODEL_NAME)
-    print("Loading Model")
+    logger.info("Loading Summarization Model")
     trained_model = SummaryModel.load_from_checkpoint(SummarizationConfig.artifacts_checkpoint_path)
     trained_model.freeze()
 
     print("=" * 100)
     print("Input Sentence")
-    input_text = """JavaScript doesn't allow you to specify what type something is. I'm guessing that wasn't deemed very useful for simply animating some HTML buttons. It also makes sense because it's quite common in web development that variables hold different types of data depending on what the user does or what kind of data the server returns. However, if you want to develop a full-fledged web application, not having these types is a recipe for disaster. And this is also why TypeScript has become so popular. TypeScript is a superset of JavaScript that adds static types to the language. With TypeScript, you can write type annotations and the TypeScript compiler will check the types at compile time when you compile the code to JavaScript, helping you catch common errors before they run."""
-    input_list = input_text.split(". ")
-    pp.pprint(input_text)
+    input_list = text.split(". ")
+    pp.pprint(text)
     print("=" * 100)
-    print("Generating output for each sentence")
-    output_list = [summarize(sentence, max_length=64) for sentence in input_list]
+    print("Parameters set to:")
+    print(f"max_length: {max_length}")
+    print(f"num_beams: {num_beams}")
+    print(f"repetition_penalty: {repetition_penalty}")
+    print(f"length_penalty: {length_penalty}")
+    print("=" * 100)
+    logger.info("Generating output for each sentence")
+    output_list = [
+        summarize(text=sentence, max_length=max_length, num_beams=num_beams, repetition_penalty=repetition_penalty, length_penalty=length_penalty)
+        for sentence in input_list
+    ]
     for sentence in output_list:
         pp.pprint(sentence)
 
     print("=" * 100)
-    print("Generating Final output")
-    pp.pprint(summarize(input_text, num_beams=5))
+    logger.info("Generating Final output")
+    pp.pprint(summarize(text=text, max_length=max_length, num_beams=num_beams, repetition_penalty=repetition_penalty, length_penalty=length_penalty))
     print("=" * 100)

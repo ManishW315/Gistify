@@ -1,3 +1,7 @@
+import argparse
+
+import yaml
+
 import pytorch_lightning as pl
 from gistify.config import SummarizationConfig, logger
 from gistify.text_summarizer.data import SummaryDataModule, load_data
@@ -8,14 +12,14 @@ from transformers import BartTokenizer
 
 
 def train_llm(
-    batch_size: int = SummarizationConfig.batch_size,
-    max_epochs: int = SummarizationConfig.max_epochs,
-    max_len_in: int = SummarizationConfig.max_len_input,
-    max_len_out: int = SummarizationConfig.max_len_output,
-    padding: bool = SummarizationConfig.padding,
-    truncation: bool = SummarizationConfig.truncation,
-    add_special_tokens: bool = SummarizationConfig.add_special_tokens,
-    num_workers: int = SummarizationConfig.num_workers,
+    batch_size: int,
+    max_epochs: int,
+    max_len_in: int,
+    max_len_out: int,
+    padding: bool,
+    truncation: bool,
+    add_special_tokens: bool,
+    num_workers: int,
 ):
     """Train the llm for fine tuning.
 
@@ -74,4 +78,64 @@ def train_llm(
 
 
 if __name__ == "__main__":
-    train_llm()
+    parser = argparse.ArgumentParser(description="Set hyperparameters for training.")
+
+    parser.add_argument("--config", metavar="", type=str, default="None", help="Path to the YAML configuration file")
+    parser.add_argument("--batch_size", metavar="", type=int, default=SummarizationConfig.batch_size, help="NUmber of samples per batch.")
+    parser.add_argument("--max_epochs", metavar="", type=int, default=SummarizationConfig.max_epochs, help="Number of complete data pass.")
+    parser.add_argument(
+        "--max_len_in", metavar="", type=int, default=SummarizationConfig.max_len_input, help="Maximum acceptable input sequence length."
+    )
+    parser.add_argument(
+        "--max_len_out", metavar="", type=int, default=SummarizationConfig.max_len_output, help="Maximum acceptable output sequence length."
+    )
+    parser.add_argument("--padding", metavar="", type=bool, default=SummarizationConfig.padding, help="Whether to do padding on input sequence.")
+    parser.add_argument(
+        "--truncation", metavar="", type=bool, default=SummarizationConfig.truncation, help="Whether to truncate the input sequence to max_length."
+    )
+    parser.add_argument(
+        "--add_special_tokens", metavar="", type=bool, default=SummarizationConfig.add_special_tokens, help="Whether to add special tokens or not."
+    )
+    parser.add_argument(
+        "--num_workers", metavar="", type=int, default=SummarizationConfig.num_workers, help="NUmber of workers for distributed processing."
+    )
+
+    args = parser.parse_args()
+
+    if args.config != "None":
+        with open(args.config, "r") as yaml_file:
+            config = yaml.safe_load(yaml_file)
+
+        try:
+            batch_size = config["data"]["batch_size"]
+            max_len_in = config["tokenizer"]["max_len_in"]
+            max_len_out = config["tokenizer"]["max_len_out"]
+            padding = config["tokenizer"]["padding"]
+            truncation = config["tokenizer"]["truncation"]
+            add_special_tokens = config["tokenizer"]["add_special_tokens"]
+            max_epochs = config["trainer"]["max_epochs"]
+            num_workers = config["trainer"]["num_workers"]
+
+        except Exception as e:
+            logger.error(e)
+
+    elif args.config == "None":
+        batch_size = args.batch_size
+        max_len_in = args.max_len_in
+        max_len_out = args.max_len_out
+        padding = args.padding
+        truncation = args.truncation
+        add_special_tokens = args.add_special_tokens
+        max_epochs = args.max_epochs
+        num_workers = args.num_workers
+
+    train_llm(
+        batch_size=batch_size,
+        max_epochs=max_epochs,
+        max_len_in=max_len_in,
+        max_len_out=max_len_out,
+        padding=padding,
+        truncation=truncation,
+        add_special_tokens=add_special_tokens,
+        num_workers=num_workers,
+    )
