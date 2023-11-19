@@ -2,15 +2,14 @@ import pprint
 
 import torch
 from gistify.config import Speech2TextConfig, SummarizationConfig
+from gistify.qa.qa_pipeline import answer
 from gistify.s2t_converter.transcribe import yt_transcribe
 from gistify.text_summarizer.model import SummaryModel
 from gistify.text_summarizer.predict import summarize
 from transformers import BartTokenizer, pipeline
 
 
-def integrate_s2t_sum(
-    yt_path,
-):
+def integrate_s2t_sum(yt_path):
     html_embed_str, text = yt_transcribe(yt_path, "transcribe", pipe)
 
     input_list = text.split(". ")
@@ -18,6 +17,13 @@ def integrate_s2t_sum(
     output_list = [summarize(sentence, max_length=64) for sentence in input_list]
 
     return text, generated_text, output_list
+
+
+def integrate_s2t_qa(yt_path, question):
+    html_embed_str, text = yt_transcribe(yt_path, "transcribe", pipe)
+    response = answer(question, text)
+
+    return response
 
 
 if __name__ == "__main__":
@@ -32,7 +38,10 @@ if __name__ == "__main__":
     tokenizer = BartTokenizer.from_pretrained(SummarizationConfig.MODEL_NAME)
     trained_model = SummaryModel.load_from_checkpoint(SummarizationConfig.artifacts_checkpoint_path)
     trained_model.freeze()
+
     text, generated_text, output_list = integrate_s2t_sum("https://www.youtube.com/shorts/BBCbIxuBJws")
     pp.pprint(text)
     pp.pprint(generated_text)
     print(output_list)
+
+    response = integrate_s2t_qa("https://www.youtube.com/shorts/BBCbIxuBJws", "What are some limitations of JavaScript?")
