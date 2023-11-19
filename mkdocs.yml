@@ -1,0 +1,23 @@
+site_name: Gistify
+# site_url: https://madewithml.com/
+repo_url: https://github.com/ManishW315/Gistify
+nav:
+  - Home: index.md
+  - gistify:
+      - config: gistify\config.md
+      - integrate: gistify\integrate.md
+      - qa:
+        - qa_pipeline: gistify\qa\qa_pipeline.md
+      - s2t_converter:
+        - transcribe: gistify\s2t_converter\transcribe.md
+        - utils: gistify\s2t_converter\utils.md
+      - text_summarizer:
+        - data: gistify\text_summarizer\data.md
+        - model: gistify\text_summarizer\model.md
+        - train: gistify\text_summarizer\train.md
+        - predict: gistify\text_summarizer\predict.md
+theme: readthedocs
+plugins:
+  - mkdocstrings
+watch:
+  - .

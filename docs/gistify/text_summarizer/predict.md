@@ -1,0 +1,1 @@
+::: gistify.text_summarizer.predict
