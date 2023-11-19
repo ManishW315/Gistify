@@ -2,7 +2,7 @@ from typing import Dict
 
 import pytorch_lightning as pl
 from datasets import load_dataset
-from gistify.config import SummarizationConfig
+from gistify.config import SummarizationConfig, logger
 from torch.utils.data import DataLoader, Dataset
 from transformers import BartTokenizer
 
@@ -26,6 +26,7 @@ def load_data(
     Returns:
         Dataset: Loaded and splitted dataset.
     """
+    logger.info("Loading data.")
     ds = load_dataset(loc, cfg, split=f"train[:{samples}]")
     ds = ds.train_test_split(test_size=test_size)
     return ds
@@ -46,6 +47,7 @@ def prepare_input(tokenizer: BartTokenizer, text: str, max_len: int, padding: bo
         Dict: A dictionary containing the tokenized input with keys such as 'input_ids',
             'attention_mask', etc.
     """
+    logger.info("Preparing data inputs.")
     inputs = tokenizer.encode_plus(
         text,
         return_tensors="pt",

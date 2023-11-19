@@ -1,4 +1,5 @@
 import torch
+from gistify.config import logger
 from transformers import DistilBertForQuestionAnswering, DistilBertTokenizer
 
 
@@ -14,13 +15,18 @@ def answer(question: str, text: str) -> str:
     """
     inputs = tokenizer(question, text, return_tensors="pt")
     with torch.no_grad():
+        logger.info("Running question answering pipeline.")
         outputs = model(**inputs)
 
     answer_start_index = torch.argmax(outputs.start_logits)
     answer_end_index = torch.argmax(outputs.end_logits)
 
-    predict_answer_tokens = inputs.input_ids[0, answer_start_index : answer_end_index + 1]
-    response = tokenizer.decode(predict_answer_tokens)
+    try:
+        logger.info("Decoding qa response.")
+        predict_answer_tokens = inputs.input_ids[0, answer_start_index : answer_end_index + 1]
+        response = tokenizer.decode(predict_answer_tokens)
+    except Exception as e:
+        logger.error(e)
 
     return response
 

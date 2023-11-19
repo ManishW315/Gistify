@@ -1,7 +1,7 @@
 import time
 
 import yt_dlp as youtube_dl
-from gistify.config import Speech2TextConfig
+from gistify.config import Speech2TextConfig, logger
 
 
 def _return_yt_html_embed(yt_url):
@@ -14,9 +14,10 @@ def download_yt_audio(yt_url, filename):
     info_loader = youtube_dl.YoutubeDL()
 
     try:
+        logger.info("Extracting youtube url info.")
         info = info_loader.extract_info(yt_url, download=False)
-    except youtube_dl.utils.DownloadError as err:
-        print(err)
+    except youtube_dl.utils.DownloadError as e:
+        logger.error(e)
 
     file_length = info["duration_string"]
     file_h_m_s = file_length.split(":")
@@ -38,5 +39,5 @@ def download_yt_audio(yt_url, filename):
     with youtube_dl.YoutubeDL(ydl_opts) as ydl:
         try:
             ydl.download([yt_url])
-        except youtube_dl.utils.ExtractorError as err:
-            print(str(err))
+        except youtube_dl.utils.ExtractorError as e:
+            logger.error(e)

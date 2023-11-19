@@ -1,7 +1,7 @@
 import pprint
 
 import torch
-from gistify.config import SummarizationConfig
+from gistify.config import SummarizationConfig, logger
 from gistify.text_summarizer.data import prepare_input
 from gistify.text_summarizer.model import SummaryModel
 from transformers import BartTokenizer
@@ -9,6 +9,7 @@ from transformers import BartTokenizer
 
 def summarize(text: str, max_length: int = 128, num_beams: int = 3, repetition_penalty: float = 2.5, length_penalty: float = 1.75):
     device = "cuda:0" if torch.cuda.is_available() else "cpu"
+    logger.info(f"Device set to {device}.")
     text_encoding = prepare_input(
         tokenizer,
         text,
@@ -18,6 +19,7 @@ def summarize(text: str, max_length: int = 128, num_beams: int = 3, repetition_p
         SummarizationConfig.add_special_tokens,
     ).to(device)
 
+    logger.info("Generating summarized text.")
     generated_ids = trained_model.model.generate(
         input_ids=text_encoding["input_ids"],
         attention_mask=text_encoding["attention_mask"],

@@ -1,5 +1,5 @@
 import pytorch_lightning as pl
-from gistify.config import SummarizationConfig
+from gistify.config import SummarizationConfig, logger
 from gistify.text_summarizer.data import SummaryDataModule, load_data
 from gistify.text_summarizer.model import SummaryModel
 from pytorch_lightning.callbacks import ModelCheckpoint
@@ -29,37 +29,48 @@ def train_llm(
         add_special_tokens (bool, optional): Whether to add special token or not. Defaults to SummarizationConfig.add_special_tokens.
         num_workers (int, optional): Number of workers for distributed computing. Defaults to SummarizationConfig.num_workers.
     """
-    # ===== Data =====
-    cnn_dataset = load_data()
-    tokenizer = BartTokenizer.from_pretrained(SummarizationConfig.MODEL_NAME)
-    data = SummaryDataModule(cnn_dataset, tokenizer, batch_size, max_len_in, max_len_out, padding, truncation, add_special_tokens, num_workers)
+    try:
+        # ===== Data =====
+        cnn_dataset = load_data()
+        tokenizer = BartTokenizer.from_pretrained(SummarizationConfig.MODEL_NAME)
+        logger.info("Preparing data.")
+        data = SummaryDataModule(cnn_dataset, tokenizer, batch_size, max_len_in, max_len_out, padding, truncation, add_special_tokens, num_workers)
 
-    # ===== Model =====
-    model = SummaryModel()
+        # ===== Model =====
+        logger.info("Initializing summarization model.")
+        model = SummaryModel()
 
-    # ===== Callback =====
-    checkpoint_callback = ModelCheckpoint(
-        monitor="val_loss",
-        mode="min",
-        dirpath="artifacts",
-        filename="best-checkpoint",
-        save_top_k=1,
-        verbose=True,
-    )
+        # ===== Callback =====
+        logger.info("Initializing callbacks.")
+        checkpoint_callback = ModelCheckpoint(
+            monitor="val_loss",
+            mode="min",
+            dirpath="artifacts",
+            filename="best-checkpoint",
+            save_top_k=1,
+            verbose=True,
+        )
 
-    # ===== Experiment Tracking (WandB) =====
-    wandb_logger = WandbLogger(project="Text_Summarization-bart-cnn")
+        # ===== Experiment Tracking (WandB) =====
+        wandb_logger = WandbLogger(project="Text_Summarization-bart-cnn")
 
-    # ===== Trainer =====
-    trainer = pl.Trainer(
-        logger=wandb_logger,
-        callbacks=checkpoint_callback,
-        max_epochs=max_epochs,
-        # accelerator="gpu",
-        # devices=1,
-    )
+        # ===== Trainer =====
+        trainer = pl.Trainer(
+            logger=wandb_logger,
+            callbacks=checkpoint_callback,
+            max_epochs=max_epochs,
+            # accelerator="gpu",
+            # devices=1,
+        )
+    except Exception as e:
+        logger.error(e)
+
     # train
-    trainer.fit(model, data)
+    try:
+        logger.info("Starting training.")
+        trainer.fit(model, data)
+    except Exception as e:
+        logger.error(e)
 
 
 if __name__ == "__main__":
