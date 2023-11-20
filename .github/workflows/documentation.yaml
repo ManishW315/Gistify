@@ -1,4 +1,4 @@
-name: documentation
+name: Documentation
 on:
   push:
     branches:
@@ -6,10 +6,7 @@ on:
 
 jobs:
   build-docs:
-    runs-on:
-    - windows-latest
-    - ubuntu-latest
-    - macos-latest
+    runs-on: windows-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
