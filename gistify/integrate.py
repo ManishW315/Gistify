@@ -1,4 +1,5 @@
 import pprint
+from typing import List, Tuple
 
 import torch
 from gistify.config import Speech2TextConfig, SummarizationConfig
@@ -9,7 +10,15 @@ from gistify.text_summarizer.predict import summarize
 from transformers import BartTokenizer, pipeline
 
 
-def integrate_s2t_sum(yt_path):
+def integrate_s2t_sum(yt_path: str) -> Tuple[str, str, List]:
+    """Integration of Speech to Text and Summarization pipeline.
+
+    Args:
+        yt_path (str): YouTube video to summarize.
+
+    Returns:
+        Tuple[str, str, List]: Transcribed text, Summarized Text, list of Intermediate summarized text (Each line summarized).
+    """
     html_embed_str, text = yt_transcribe(yt_path, "transcribe", pipe)
 
     input_list = text.split(". ")
@@ -19,7 +28,16 @@ def integrate_s2t_sum(yt_path):
     return text, generated_text, output_list
 
 
-def integrate_s2t_qa(yt_path, question):
+def integrate_s2t_qa(yt_path: str, question: str) -> str:
+    """Integration of Speech to Text and Question Answering pipeline.
+
+    Args:
+        yt_path (str): YouTube video to learn and do question answering.
+        question (str): Question to ask from the video.
+
+    Returns:
+        str: Response/answer.
+    """
     html_embed_str, text = yt_transcribe(yt_path, "transcribe", pipe)
     response = answer(question, text)
 

@@ -16,7 +16,21 @@ def summarize(
     length_penalty: float,
     tokenizer: BartTokenizer,
     trained_model: SummaryModel,
-):
+) -> str:
+    """Summarize the given text.
+
+    Args:
+        text (str): Input text that needs to be summarized.
+        max_length (int): Maximum acceptable input length.
+        num_beams (int): The parameter for number of beams. If higher than 1 then effectively switches from greedy search to beam search.
+        repetition_penalty (float): The parameter for repetition penalty. A value of 1.0 means no penalty.
+        length_penalty (float): The parameter for length penalty. length_penalty > 0.0 promotes longer sequences, while length_penalty < 0.0 encourages shorter sequences.
+        tokenizer (BartTokenizer): Tokenizer to use for tokenizing the input text.
+        trained_model (SummaryModel): Model to use for summarization.
+
+    Returns:
+        str: Summary of the input text.
+    """
     device = "cuda:0" if torch.cuda.is_available() else "cpu"
     logger.info(f"Device set to {device}.")
     text_encoding = prepare_input(
@@ -63,7 +77,7 @@ if __name__ == "__main__":
         metavar="",
         type=float,
         default=SummarizationConfig.repetition_penalty,
-        help=" The parameter for repetition penalty. A value of 1.0 means no penalty.",
+        help="The parameter for repetition penalty. A value of 1.0 means no penalty.",
     )
     parser.add_argument(
         "--length_penalty",
@@ -117,5 +131,15 @@ if __name__ == "__main__":
 
     print("=" * 100)
     logger.info("Generating Final output")
-    pp.pprint(summarize(text=text, max_length=max_length, num_beams=num_beams, repetition_penalty=repetition_penalty, length_penalty=length_penalty))
+    pp.pprint(
+        summarize(
+            text=text,
+            max_length=max_length,
+            num_beams=num_beams,
+            repetition_penalty=repetition_penalty,
+            length_penalty=length_penalty,
+            tokenizer=tokenizer,
+            trained_model=trained_model,
+        )
+    )
     print("=" * 100)

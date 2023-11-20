@@ -1,6 +1,7 @@
 import argparse
 import os
 import tempfile
+from typing import Any, Tuple
 
 import torch
 from gistify.config import Speech2TextConfig, logger
@@ -10,7 +11,17 @@ from transformers import pipeline
 from transformers.pipelines.audio_utils import ffmpeg_read
 
 
-def yt_transcribe(yt_url, task, pipe):
+def yt_transcribe(yt_url: str, task: str, pipe: Any) -> Tuple[str, str]:
+    """Transcribe/Translate the audio from YouTube video url.
+
+    Args:
+        yt_url (str): YouTube video url.
+        task (str): Task that needs to be performed. Parse 'transcribe' if the audio of video is in english otherwise parse 'translate' to first transcribe and then translate.
+        pipe (Any): Transformers ASR pipeline.
+
+    Returns:
+        Tuple[str, str]: HTML embedded string and the transcribed/translated text.
+    """
     html_embed_str = _return_yt_html_embed(yt_url)
 
     with tempfile.TemporaryDirectory() as tmpdirname:

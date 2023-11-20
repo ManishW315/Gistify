@@ -6,13 +6,27 @@ from gistify.config import Speech2TextConfig, logger
 # Reference (HuggingFace Spaces): https://huggingface.co/spaces/sanchit-gandhi/whisper-large-v2
 
 
-def _return_yt_html_embed(yt_url):
+def _return_yt_html_embed(yt_url: str) -> str:
+    """Returns HTML embedded string of the YouTube URL.
+
+    Args:
+        yt_url (str): YouTube video URL.
+
+    Returns:
+        str: HTML embedded string.
+    """
     video_id = yt_url.split("?v=")[-1]
     HTML_str = f'<center> <iframe width="500" height="320" src="https://www.youtube.com/embed/{video_id}"> </iframe>' " </center>"
     return HTML_str
 
 
-def download_yt_audio(yt_url, filename):
+def download_yt_audio(yt_url: str, filename: str) -> None:
+    """Download YouTube video's audio.
+
+    Args:
+        yt_url (str): YouTube video URL.
+        filename (str): filepath to save save the audio.
+    """
     info_loader = youtube_dl.YoutubeDL()
 
     try:
