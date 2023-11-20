@@ -5,12 +5,14 @@ from gistify.config import logger
 from transformers import DistilBertForQuestionAnswering, DistilBertTokenizer
 
 
-def answer(question: str, context: str) -> str:
+def answer(question: str, context: str, tokenizer: DistilBertTokenizer, model: DistilBertForQuestionAnswering) -> str:
     """Question answering pipeline.
 
     Args:
         question (str): Question to ask from the context.
         context (str): The context from which questions are to be asked.
+        tokenizer: Tokenizer to use to tokenize input text.
+        model: QA Model to use for answering.
 
     Returns:
         str: response/answer.
@@ -47,5 +49,5 @@ if __name__ == "__main__":
     tokenizer = DistilBertTokenizer.from_pretrained("distilbert-base-uncased-distilled-squad")
     model = DistilBertForQuestionAnswering.from_pretrained("distilbert-base-uncased-distilled-squad")
 
-    response = answer(question, context)
+    response = answer(question, context, tokenizer, model)
     print(response)

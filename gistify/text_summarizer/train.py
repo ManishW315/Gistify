@@ -12,6 +12,8 @@ from transformers import BartTokenizer
 
 
 def train_llm(
+    samples: int,
+    test_size: float,
     batch_size: int,
     max_epochs: int,
     max_len_in: int,
@@ -24,18 +26,20 @@ def train_llm(
     """Train the llm for fine tuning.
 
     Args:
-        batch_size (int, optional): Number of samples per batch. Defaults to SummarizationConfig.batch_size.
-        max_epochs (int, optional): Maximum number of epochs. Defaults to SummarizationConfig.max_epochs.
-        max_len_in (int, optional): Maximum input sequence length. Defaults to SummarizationConfig.max_len_input.
-        max_len_out (int, optional): Maximum output sequence length. Defaults to SummarizationConfig.max_len_output.
-        padding (bool, optional): Whether to do padding or not. Defaults to SummarizationConfig.padding.
-        truncation (bool, optional): Whether to do truncation or not. Defaults to SummarizationConfig.truncation.
-        add_special_tokens (bool, optional): Whether to add special token or not. Defaults to SummarizationConfig.add_special_tokens.
-        num_workers (int, optional): Number of workers for distributed computing. Defaults to SummarizationConfig.num_workers.
+        samples (int): Number of samples to take from the data.
+        test_size (float): Test set split proportion.
+        batch_size (int): Number of samples per batch. Defaults to SummarizationConfig.batch_size.
+        max_epochs (int): Maximum number of epochs. Defaults to SummarizationConfig.max_epochs.
+        max_len_in (int): Maximum input sequence length. Defaults to SummarizationConfig.max_len_input.
+        max_len_out (int): Maximum output sequence length. Defaults to SummarizationConfig.max_len_output.
+        padding (bool): Whether to do padding or not. Defaults to SummarizationConfig.padding.
+        truncation (bool): Whether to do truncation or not. Defaults to SummarizationConfig.truncation.
+        add_special_tokens (bool): Whether to add special token or not. Defaults to SummarizationConfig.add_special_tokens.
+        num_workers (int): Number of workers for distributed computing. Defaults to SummarizationConfig.num_workers.
     """
     try:
         # ===== Data =====
-        cnn_dataset = load_data()
+        cnn_dataset = load_data(samples=samples, test_size=test_size)
         tokenizer = BartTokenizer.from_pretrained(SummarizationConfig.MODEL_NAME)
         logger.info("Preparing data.")
         data = SummaryDataModule(cnn_dataset, tokenizer, batch_size, max_len_in, max_len_out, padding, truncation, add_special_tokens, num_workers)
@@ -80,7 +84,9 @@ def train_llm(
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Set hyperparameters for training.")
 
-    parser.add_argument("--config", metavar="", type=str, default="None", help="Path to the YAML configuration file")
+    parser.add_argument("--config", metavar="", type=str, default="None", help="Path to the YAML configuration file.")
+    parser.add_argument("--samples", metavar="", type=str, default=SummarizationConfig.SAMPLES, help="Number of samples to take from the data.")
+    parser.add_argument("--test-size", metavar="", type=str, default=SummarizationConfig.test_size, help="Test set split proportion.")
     parser.add_argument("--batch_size", metavar="", type=int, default=SummarizationConfig.batch_size, help="NUmber of samples per batch.")
     parser.add_argument("--max_epochs", metavar="", type=int, default=SummarizationConfig.max_epochs, help="Number of complete data pass.")
     parser.add_argument(
@@ -107,6 +113,8 @@ if __name__ == "__main__":
             config = yaml.safe_load(yaml_file)
 
         try:
+            samples = config["data"]["samples"]
+            test_size = config["data"]["test_size"]
             batch_size = config["data"]["batch_size"]
             max_len_in = config["tokenizer"]["max_len_in"]
             max_len_out = config["tokenizer"]["max_len_out"]
@@ -120,6 +128,8 @@ if __name__ == "__main__":
             logger.error(e)
 
     elif args.config == "None":
+        samples = args.samples
+        test_size = args.test_size
         batch_size = args.batch_size
         max_len_in = args.max_len_in
         max_len_out = args.max_len_out
@@ -130,6 +140,8 @@ if __name__ == "__main__":
         num_workers = args.num_workers
 
     train_llm(
+        samples=samples,
+        test_size=test_size,
         batch_size=batch_size,
         max_epochs=max_epochs,
         max_len_in=max_len_in,

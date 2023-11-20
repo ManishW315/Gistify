@@ -8,7 +8,15 @@ from gistify.text_summarizer.model import SummaryModel
 from transformers import BartTokenizer
 
 
-def summarize(text: str, max_length: int, num_beams: int, repetition_penalty: float, length_penalty: float):
+def summarize(
+    text: str,
+    max_length: int,
+    num_beams: int,
+    repetition_penalty: float,
+    length_penalty: float,
+    tokenizer: BartTokenizer,
+    trained_model: SummaryModel,
+):
     device = "cuda:0" if torch.cuda.is_available() else "cpu"
     logger.info(f"Device set to {device}.")
     text_encoding = prepare_input(
@@ -93,7 +101,15 @@ if __name__ == "__main__":
     print("=" * 100)
     logger.info("Generating output for each sentence")
     output_list = [
-        summarize(text=sentence, max_length=max_length, num_beams=num_beams, repetition_penalty=repetition_penalty, length_penalty=length_penalty)
+        summarize(
+            text=sentence,
+            max_length=max_length,
+            num_beams=num_beams,
+            repetition_penalty=repetition_penalty,
+            length_penalty=length_penalty,
+            tokenizer=tokenizer,
+            trained_model=trained_model,
+        )
         for sentence in input_list
     ]
     for sentence in output_list:
