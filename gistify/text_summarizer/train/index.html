@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="../../../img/favicon.ico" />
+    <title>train - Gistify</title>
+    <link rel="stylesheet" href="../../../css/theme.css" />
+    <link rel="stylesheet" href="../../../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css" />
+        <link href="../../../assets/_mkdocstrings.css" rel="stylesheet" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "train";
+        var mkdocs_page_input_path = "gistify\\text_summarizer\\train.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <script src="../../../js/jquery-3.6.0.min.js" defer></script>
+    <!--[if lt IE 9]>
+      <script src="../../../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+      <script>hljs.initHighlightingOnLoad();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="../../.." class="icon icon-home"> Gistify
+        </a>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../..">Home</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">gistify</span></p>
+              <ul class="current">
+                  <li class="toctree-l1"><a class="reference internal" href="../../config/">config</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../integrate/">integrate</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="#">qa</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../../qa/qa_pipeline/">qa_pipeline</a>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="#">s2t_converter</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../../s2t_converter/transcribe/">transcribe</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../s2t_converter/utils/">utils</a>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1 current"><a class="reference internal current" href="#">text_summarizer</a>
+    <ul class="current">
+                <li class="toctree-l2"><a class="reference internal" href="../data/">data</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../model/">model</a>
+                </li>
+                <li class="toctree-l2 current"><a class="reference internal current" href="./">train</a>
+    <ul class="current">
+    </ul>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../predict/">predict</a>
+                </li>
+    </ul>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../..">Gistify</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../../.." class="icon icon-home" alt="Docs"></a> &raquo;</li>
+          <li>gistify &raquo;</li>
+          <li>text_summarizer &raquo;</li>
+      <li>train</li>
+    <li class="wy-breadcrumbs-aside">
+          <a href="https://github.com/ManishW315/Gistify/edit/master/docs/gistify/text_summarizer/train.md" class="icon icon-github"> Edit on GitHub</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <div class="doc doc-object doc-module">
+
+
+
+<a id="gistify.text_summarizer.train"></a>
+  <div class="doc doc-contents first">
+
+  
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-function">
+
+
+
+
+<h2 id="gistify.text_summarizer.train.train_llm" class="doc doc-heading">
+          <code class="highlight language-python">train_llm(samples, test_size, batch_size, max_epochs, max_len_in, max_len_out, padding, truncation, add_special_tokens, num_workers)</code>
+
+</h2>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>Train the llm for fine tuning.</p>
+
+
+
+<table class="field-list">
+  <colgroup>
+    <col class="field-name" />
+    <col class="field-body" />
+  </colgroup>
+  <tbody valign="top">
+    <tr class="field">
+      <th class="field-name">Parameters:</th>
+      <td class="field-body">
+        <ul class="first simple">
+            <li>
+              <b><code>samples</code></b>
+                  (<code>int</code>)
+              –
+              <div class="doc-md-description">
+                <p>Number of samples to take from the data.</p>
+              </div>
+            </li>
+            <li>
+              <b><code>test_size</code></b>
+                  (<code>float</code>)
+              –
+              <div class="doc-md-description">
+                <p>Test set split proportion.</p>
+              </div>
+            </li>
+            <li>
+              <b><code>batch_size</code></b>
+                  (<code>int</code>)
+              –
+              <div class="doc-md-description">
+                <p>Number of samples per batch. Defaults to SummarizationConfig.batch_size.</p>
+              </div>
+            </li>
+            <li>
+              <b><code>max_epochs</code></b>
+                  (<code>int</code>)
+              –
+              <div class="doc-md-description">
+                <p>Maximum number of epochs. Defaults to SummarizationConfig.max_epochs.</p>
+              </div>
+            </li>
+            <li>
+              <b><code>max_len_in</code></b>
+                  (<code>int</code>)
+              –
+              <div class="doc-md-description">
+                <p>Maximum input sequence length. Defaults to SummarizationConfig.max_len_input.</p>
+              </div>
+            </li>
+            <li>
+              <b><code>max_len_out</code></b>
+                  (<code>int</code>)
+              –
+              <div class="doc-md-description">
+                <p>Maximum output sequence length. Defaults to SummarizationConfig.max_len_output.</p>
+              </div>
+            </li>
+            <li>
+              <b><code>padding</code></b>
+                  (<code>bool</code>)
+              –
+              <div class="doc-md-description">
+                <p>Whether to do padding or not. Defaults to SummarizationConfig.padding.</p>
+              </div>
+            </li>
+            <li>
+              <b><code>truncation</code></b>
+                  (<code>bool</code>)
+              –
+              <div class="doc-md-description">
+                <p>Whether to do truncation or not. Defaults to SummarizationConfig.truncation.</p>
+              </div>
+            </li>
+            <li>
+              <b><code>add_special_tokens</code></b>
+                  (<code>bool</code>)
+              –
+              <div class="doc-md-description">
+                <p>Whether to add special token or not. Defaults to SummarizationConfig.add_special_tokens.</p>
+              </div>
+            </li>
+            <li>
+              <b><code>num_workers</code></b>
+                  (<code>int</code>)
+              –
+              <div class="doc-md-description">
+                <p>Number of workers for distributed computing. Defaults to SummarizationConfig.num_workers.</p>
+              </div>
+            </li>
+        </ul>
+      </td>
+    </tr>
+  </tbody>
+</table>
+          <details class="quote">
+            <summary>Source code in <code>gistify\text_summarizer\train.py</code></summary>
+            <pre class="highlight"><code class="language-python">def train_llm(
+    samples: int,
+    test_size: float,
+    batch_size: int,
+    max_epochs: int,
+    max_len_in: int,
+    max_len_out: int,
+    padding: bool,
+    truncation: bool,
+    add_special_tokens: bool,
+    num_workers: int,
+):
+    """Train the llm for fine tuning.
+
+    Args:
+        samples (int): Number of samples to take from the data.
+        test_size (float): Test set split proportion.
+        batch_size (int): Number of samples per batch. Defaults to SummarizationConfig.batch_size.
+        max_epochs (int): Maximum number of epochs. Defaults to SummarizationConfig.max_epochs.
+        max_len_in (int): Maximum input sequence length. Defaults to SummarizationConfig.max_len_input.
+        max_len_out (int): Maximum output sequence length. Defaults to SummarizationConfig.max_len_output.
+        padding (bool): Whether to do padding or not. Defaults to SummarizationConfig.padding.
+        truncation (bool): Whether to do truncation or not. Defaults to SummarizationConfig.truncation.
+        add_special_tokens (bool): Whether to add special token or not. Defaults to SummarizationConfig.add_special_tokens.
+        num_workers (int): Number of workers for distributed computing. Defaults to SummarizationConfig.num_workers.
+    """
+    try:
+        # ===== Data =====
+        cnn_dataset = load_data(samples=samples, test_size=test_size)
+        tokenizer = BartTokenizer.from_pretrained(SummarizationConfig.MODEL_NAME)
+        logger.info("Preparing data.")
+        data = SummaryDataModule(cnn_dataset, tokenizer, batch_size, max_len_in, max_len_out, padding, truncation, add_special_tokens, num_workers)
+
+        # ===== Model =====
+        logger.info("Initializing summarization model.")
+        model = SummaryModel()
+
+        # ===== Callback =====
+        logger.info("Initializing callbacks.")
+        checkpoint_callback = ModelCheckpoint(
+            monitor="val_loss",
+            mode="min",
+            dirpath="artifacts",
+            filename="best-checkpoint",
+            save_top_k=1,
+            verbose=True,
+        )
+
+        # ===== Experiment Tracking (WandB) =====
+        wandb_logger = WandbLogger(project="Text_Summarization-bart-cnn")
+
+        # ===== Trainer =====
+        trainer = pl.Trainer(
+            logger=wandb_logger,
+            callbacks=checkpoint_callback,
+            max_epochs=max_epochs,
+            # accelerator="gpu",
+            # devices=1,
+        )
+    except Exception as e:
+        logger.error(e)
+
+    # train
+    try:
+        logger.info("Starting training.")
+        trainer.fit(model, data)
+    except Exception as e:
+        logger.error(e)</code></pre>
+          </details>
+  </div>
+
+</div>
+
+
+
+  </div>
+
+  </div>
+
+</div>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../model/" class="btn btn-neutral float-left" title="model"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../predict/" class="btn btn-neutral float-right" title="predict">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+        <span>
+          <a href="https://github.com/ManishW315/Gistify" class="fa fa-github" style="color: #fcfcfc"> GitHub</a>
+        </span>
+    
+    
+      <span><a href="../model/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../predict/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script>var base_url = '../../..';</script>
+    <script src="../../../js/theme_extra.js" defer></script>
+    <script src="../../../js/theme.js" defer></script>
+    <script defer>
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        };
+    </script>
+
+</body>
+</html>
