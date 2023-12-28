@@ -94,4 +94,3 @@ python gistify\qa\qa_pipeline.py --context "Input text here" --question "Ask que
 Check the documentation and `config.py` file for own custom training.
 
 The training script requires us to have a [Weights and Biases](https://wandb.ai/site) account for experiment tracking and visualization.
-
