@@ -38,13 +38,13 @@ def answer(question: str, context: str, tokenizer: DistilBertTokenizer, model: D
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Input question and context based on which the answer should be given.")
 
-    parser.add_argument("--question", metavar="", type=str, help="Question to ask.")
     parser.add_argument("--context", metavar="", type=str, default="transcribe", help="Context based on which answer should be given.")
+    parser.add_argument("--question", metavar="", type=str, help="Question to ask.")
 
     args = parser.parse_args()
 
-    question = args.question
     context = args.context
+    question = args.question
 
     tokenizer = DistilBertTokenizer.from_pretrained("distilbert-base-uncased-distilled-squad")
     model = DistilBertForQuestionAnswering.from_pretrained("distilbert-base-uncased-distilled-squad")

@@ -44,6 +44,7 @@ class SummarizationConfig:
 
 
 logs_path = os.path.join(Path(__file__).parent.parent, "logs")
+
 # Create logs folder
 os.makedirs(logs_path, exist_ok=True)
 
@@ -57,14 +58,14 @@ console_handler.setLevel(logging.INFO)
 
 info_handler = RotatingFileHandler(
     filename=Path(logs_path, "info.log"),
-    maxBytes=10485760,  # 1 MB
+    maxBytes=10485760,
     backupCount=10,
 )
 info_handler.setLevel(logging.INFO)
 
 error_handler = RotatingFileHandler(
     filename=Path(logs_path, "error.log"),
-    maxBytes=10485760,  # 1 MB
+    maxBytes=10485760,
     backupCount=10,
 )
 error_handler.setLevel(logging.ERROR)
@@ -73,7 +74,6 @@ error_handler.setLevel(logging.ERROR)
 minimal_formatter = logging.Formatter(fmt="%(message)s")
 detailed_formatter = logging.Formatter(fmt="%(levelname)s %(asctime)s [%(name)s:%(filename)s:%(funcName)s:%(lineno)d]\n%(message)s\n")
 
-# Hook it all up
 console_handler.setFormatter(fmt=minimal_formatter)
 info_handler.setFormatter(fmt=detailed_formatter)
 error_handler.setFormatter(fmt=detailed_formatter)
